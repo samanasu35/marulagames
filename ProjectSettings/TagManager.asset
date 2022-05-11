@@ -8,6 +8,8 @@ TagManager:
   - large
   - add
   - wall
+  - turnLeft
+  - turnRight
   layers:
   - Default
   - TransparentFX

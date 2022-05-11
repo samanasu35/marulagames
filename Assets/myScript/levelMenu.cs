@@ -31,15 +31,16 @@ public class levelMenu : menu
     {
         kazanilan += coin;
         if (kazanilan<0) kazanilan = 0;
-        txtKazanilan.text = "Kazanılan Coin: " + kazanilan;
         Debug.Log("K:" + kazanilan);
 
     }
 
     public void finis()
     {
+        kazanilan = Mathf.RoundToInt(kazanilan);
         toplam += kazanilan;
         txtToplam.text = "Toplam Coin: " + toplam;
+        txtKazanilan.text = "Kazanılan Coin: " + kazanilan;
         Debug.Log("K:" + kazanilan + ",T:" + toplam);
         PlayerPrefs.SetInt("level", level + 1);
         PlayerPrefs.SetFloat("coin",toplam);

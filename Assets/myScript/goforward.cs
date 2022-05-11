@@ -8,12 +8,13 @@ public class goforward : MonoBehaviour
 {
 
     public int tall = 4; 
-    public float speed = 3.0f;
+    public float speed = 3.0f, yon = 90f;
     public GameObject barrel;
     public GameObject goddes;
-    public GameObject retry,ingame,contineu;
+    public GameObject retry,ingame,contineu,skill;
 
     private bool finish=false;
+    private float speedUpTime = 5f;
     public GameObject hitEffect,hitEffect2,finishEffect;
 
     public levelMenu lvlMenu;
@@ -39,6 +40,8 @@ public class goforward : MonoBehaviour
             }
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, yon, 0), Time.deltaTime * speed);
     }
 
     void OnTriggerEnter(Collider other)
@@ -71,6 +74,17 @@ public class goforward : MonoBehaviour
             SpawnEffect(hitEffect2);
             lvlMenu.earnCoin(2.5f);
         }
+        
+        if (other.tag.Equals("turnLeft"))
+        {
+            Destroy(other);
+            yon-=90;
+        }
+        if (other.tag.Equals("turnRight"))
+        {
+            Destroy(other);
+            yon+=90;
+        }
         if (other.tag.Equals("Finish"))
         {
             finish = true;
@@ -98,5 +112,18 @@ public class goforward : MonoBehaviour
     public void changeScene(string lvl)
     {
         SceneManager.LoadScene(lvl);
+    }
+
+    public void speedUp()
+    {
+        speed = 6f;
+        StartCoroutine(StartCountdown());
+        skill.SetActive(false);
+    }
+
+    public IEnumerator StartCountdown(float countdownValue = 5f)
+    {
+        yield return new WaitForSeconds(countdownValue);
+        speed = 3f;
     }
 }
