@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class goforward : MonoBehaviour
 {
@@ -12,8 +14,9 @@ public class goforward : MonoBehaviour
     public GameObject retry,ingame,contineu;
 
     private bool finish=false;
-    public GameObject hitEffect;
+    public GameObject hitEffect,hitEffect2,finishEffect;
 
+    public levelMenu lvlMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +50,8 @@ public class goforward : MonoBehaviour
             barrel.transform.localScale += new Vector3(0,-0.2f,0);
             tall--;
             Destroy(other.transform.parent.gameObject);
-            SpawnHit();
+            SpawnEffect(hitEffect);
+            lvlMenu.earnCoin(-2.5f);
         }
         if (other.tag.Equals("large"))
         {
@@ -55,7 +59,8 @@ public class goforward : MonoBehaviour
             barrel.transform.localScale += new Vector3(0,-0.4f,0);
             tall-=2;
             Destroy(other.transform.parent.gameObject);
-            SpawnHit();
+            SpawnEffect(hitEffect);
+            lvlMenu.earnCoin(-5f);
         }
         if (other.tag.Equals("add"))
         {
@@ -63,6 +68,8 @@ public class goforward : MonoBehaviour
             barrel.transform.localScale += new Vector3(0,0.2f,0);
             tall++;
             Destroy(other.transform.parent.gameObject);
+            SpawnEffect(hitEffect2);
+            lvlMenu.earnCoin(2.5f);
         }
         if (other.tag.Equals("Finish"))
         {
@@ -71,6 +78,8 @@ public class goforward : MonoBehaviour
             animation.Play("spin");
             contineu.SetActive(true);
             ingame.SetActive(false);
+            SpawnEffect(finishEffect);
+            lvlMenu.finis();
         }
         if (tall <= 0)
         {
@@ -81,10 +90,13 @@ public class goforward : MonoBehaviour
         }
     }
 
-    private void SpawnHit()
-		{
-			GameObject spawnedHit = Instantiate(hitEffect);
-			spawnedHit.transform.position=goddes.transform.position + new Vector3(0,1f,0);
-            spawnedHit.SetActive(true);
-		}
+    private void SpawnEffect(GameObject effect)
+    {
+        effect.SetActive(true);
+    }
+
+    public void changeScene(string lvl)
+    {
+        SceneManager.LoadScene(lvl);
+    }
 }
